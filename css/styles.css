@@ -1,0 +1,32 @@
+html {
+  scroll-behavior: smooth;
+  overflow: hidden;
+}
+
+body {
+  width: 100%;
+  background-color: #170032;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25' viewBox='0 0 1600 800'%3E%3Cg fill-opacity='0.22'%3E%3Cpolygon fill='%2321004a' points='1600 160 0 460 0 350 1600 50'/%3E%3Cpolygon fill='%232b0062' points='1600 260 0 560 0 450 1600 150'/%3E%3Cpolygon fill='%2336007a' points='1600 360 0 660 0 550 1600 250'/%3E%3Cpolygon fill='%23400092' points='1600 460 0 760 0 650 1600 350'/%3E%3Cpolygon fill='%234A00AA' points='1600 800 0 800 0 750 1600 450'/%3E%3C/g%3E%3C/svg%3E");
+  background-attachment: fixed;
+  background-size: cover;
+}
+
+.content {
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  align-content: center;
+  margin: 0;
+}
+
+.options {
+  display: grid;
+  width: 100px;
+  gap: 15px;
+}
+
+.btn {
+  height: 80px;
+  width: 350px;
+}
