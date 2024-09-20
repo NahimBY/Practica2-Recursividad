@@ -1,9 +1,15 @@
 body {
+  overflow: hidden;
   margin: 0;
 }
 
 canvas {
   display: block;
+}
+
+#cycNum {
+  width: 80px;
+  text-align: center;
 }
 
 #moves {

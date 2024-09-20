@@ -12,7 +12,7 @@ const camera = new THREE.PerspectiveCamera(
   1000,
 );
 const renderer = new THREE.WebGLRenderer({ antialias: true });
-renderer.setSize(window.innerWidth, window.innerHeight - 56);
+renderer.setSize(window.innerWidth, window.innerHeight);
 document.getElementById("gamebox").appendChild(renderer.domElement);
 
 // lighting
@@ -80,7 +80,9 @@ for (let i = 0; i < numDisks; i++) {
   createDisk(1.5 - 0.25 * i, 0.5, -4, 0.25 + 0.5 * i, 0, color); // Create disk with interpolated color
 }
 
-camera.position.z = 15;
+camera.position.x = 4;
+camera.position.y = 8;
+camera.position.z = 12;
 
 //  OrbitControls
 const controls = new THREE.OrbitControls(camera, renderer.domElement);
