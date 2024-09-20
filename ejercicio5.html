@@ -20,23 +20,23 @@
   </head>
 
   <body>
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
-      <div class="container">
-        <div class="selectNumCyc">
-          <select name="cycNum" id="cycNum">
-            <option value="3">3</option>
-            <option value="3">4</option>
-            <option value="3">5</option>
-            <option value="3">6</option>
-          </select>
-        </div>
+    <div id="leftPanel">
+      <div>Movimientos: <span id="movesui">0</span></div>
+      <div>
+        <label for="numDisksInput">Cantidad de discos:</label>
+        <select id="numDisksInput">
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+        </select>
+        <!-- <center><input type="number" id="numDisksInput" value="6" min="3" max="10" class="form-control" /></center> -->
       </div>
-    </nav>
-
-    <div style="position: relative" id="gamebox">
-      <div id="moves">Moves: <span id="movesui">0</span></div>
+      <div>
+        <button id="startGame" class="btn btn-primary">Iniciar</button>
+      </div>
     </div>
-
+    <div id="gamebox"></div>
     <!-- Import Three.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 

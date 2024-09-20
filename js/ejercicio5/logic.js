@@ -27,6 +27,7 @@ scene.add(directionalLight);
 const baseGeometry = new THREE.BoxGeometry(12, 1, 5);
 const baseMaterial = new THREE.MeshPhongMaterial({ color: 0x8b4513 });
 const base = new THREE.Mesh(baseGeometry, baseMaterial);
+base.position.x = 5;
 base.position.y = -0.5;
 scene.add(base);
 
@@ -44,9 +45,10 @@ function createTower(x) {
 }
 
 // Create three towers
-createTower(-4);
-createTower(0);
-createTower(4);
+createTower(1);   // Primera torre en x = 0 (antes era -4)
+createTower(5);   // Segunda torre en x = 4 (antes era 0)
+createTower(9);   // Tercera torre en x = 8 (antes era 4)
+
 
 const disks = [[], [], []];
 
@@ -61,7 +63,7 @@ function createDisk(radius, height, x, y, towerIndex, color) {
   const geometry = new THREE.CylinderGeometry(radius, radius, height, 32);
   const material = new THREE.MeshPhongMaterial({ color });
   const disk = new THREE.Mesh(geometry, material);
-  disk.position.set(x, y, 0);
+  disk.position.set(1, y, 0);
   scene.add(disk);
   disks[towerIndex].push(disk);
 }
@@ -71,7 +73,8 @@ const baseColor = new THREE.Color(0x1e90ff); // Blue
 const targetColor = new THREE.Color(0xffffff); // White
 
 // Number of disks
-const numDisks = 6;
+let numDisks = 3;
+
 
 // Create disks with gradient colors
 for (let i = 0; i < numDisks; i++) {
@@ -81,7 +84,7 @@ for (let i = 0; i < numDisks; i++) {
 }
 
 camera.position.x = 4;
-camera.position.y = 8;
+camera.position.y = 8;  
 camera.position.z = 12;
 
 //  OrbitControls
@@ -164,7 +167,8 @@ function moveDisk(fromTowerIndex, toTowerIndex) {
   }
 
   // Check if the move is valid
-  const fromDisk = disks[fromTowerIndex][disks[fromTowerIndex].length - 1];
+  const fromDisk =
+    disks[fromTowerIndex][disks[fromTowerIndex].length - 1];
   const toDisk = disks[toTowerIndex][disks[toTowerIndex].length - 1];
   if (
     toDisk &&
@@ -248,6 +252,42 @@ window.addEventListener("resize", () => {
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
 });
+
+document.getElementById("startGame").addEventListener("click", () => {
+  // Restablecer movimientos
+  moves = 0;
+  movesui.innerText = moves;
+
+  // Limpiar los discos actuales del escenario
+  disks.forEach(tower => {
+    tower.forEach(disk => {
+      scene.remove(disk);
+    });
+  });
+  disks[0] = [];
+  disks[1] = [];
+  disks[2] = [];
+
+  // Restablecer los colores de las torres a su color original
+  towers.forEach(tower => {
+    tower.material.color.set(0x808080); // Color gris original
+  });
+
+  // Restablecer el color de la base a su color original
+  base.material.color.set(0x8b4513); // Color marrón original
+
+  // Actualizar la cantidad de discos seleccionada
+  numDisks = parseInt(document.getElementById("numDisksInput").value);
+
+  // Crear nuevos discos con la cantidad seleccionada y restablecer sus colores
+  for (let i = 0; i < numDisks; i++) {
+    const factor = i / (numDisks - 1); // Calcular factor de interpolación
+    const color = interpolateColor(baseColor, targetColor, factor); // Color interpolado
+    createDisk(1.5 - 0.25 * i, 0.5, -4, 0.25 + 0.5 * i, 0, color); // Crear disco
+  }
+});
+
+
 
 function animate() {
   requestAnimationFrame(animate);

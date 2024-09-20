@@ -1,15 +1,49 @@
-body {
-  overflow: hidden;
+* {
   margin: 0;
+  padding: 0;
+}
+
+body {
+  margin: 0;
+  background-color: #87ceeb;
+  overflow: hidden;
+  display: flex;
 }
 
 canvas {
   display: block;
+  /* left: 180px; */
+  /* position: absolute; */
+  /* margin-left: 180px; */
 }
 
-#cycNum {
-  width: 80px;
+#leftPanel {
+  position: absolute;
+  width: 400px;
+  height: 100vh;
+  padding: 20px;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  background-color: #212f3d;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  z-index: 99;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   text-align: center;
+  color: #fff;
+}
+
+/* Espacio entre los elementos dentro del panel */
+#leftPanel div {
+  margin-bottom: 10px;
+}
+
+#leftPanel button {
+  width: 100%;
+}
+
+#gamebox {
+  z-index: 2;
 }
 
 #moves {
@@ -17,7 +51,19 @@ canvas {
   top: 10px;
   left: 50%;
   transform: translateX(-50%);
-  color: white;
+  color: rgb(0, 0, 0);
   font-size: 18px;
   z-index: 10;
+}
+
+#numDisksInput {
+  width: 50%;
+  height: 40px;
+  border-radius: 5px;
+  padding-left: 10px;
+}
+
+#startGame {
+  margin-top: 10px;
+  height: 40px;
 }
