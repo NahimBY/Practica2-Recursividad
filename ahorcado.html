@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Juego de Ahorcado</title>
+    <link rel="stylesheet" href="css/ahorcado.css" />
+  </head>
+  <body>
+    <div class="game-container">
+      <h1>Ahorcado</h1>
+      <div id="word"></div>
+      <div id="message"></div>
+      <input
+        type="text"
+        id="guessInput"
+        maxlength="1"
+        placeholder="Ingresa una letra"
+        autofocus
+      />
+      <button onclick="handleGuess()">Adivinar</button>
+      <p>Intentos restantes: <span id="attemptsLeft"></span></p>
+    </div>
+    <script src="js/extra.js"></script>
+  </body>
+</html>

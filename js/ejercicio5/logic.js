@@ -45,10 +45,9 @@ function createTower(x) {
 }
 
 // Create three towers
-createTower(1);   // Primera torre en x = 0 (antes era -4)
-createTower(5);   // Segunda torre en x = 4 (antes era 0)
-createTower(9);   // Tercera torre en x = 8 (antes era 4)
-
+createTower(1); // Primera torre en x = 0 (antes era -4)
+createTower(5); // Segunda torre en x = 4 (antes era 0)
+createTower(9); // Tercera torre en x = 8 (antes era 4)
 
 const disks = [[], [], []];
 
@@ -75,7 +74,6 @@ const targetColor = new THREE.Color(0xffffff); // White
 // Number of disks
 let numDisks = 3;
 
-
 // Create disks with gradient colors
 for (let i = 0; i < numDisks; i++) {
   const factor = i / (numDisks - 1); // Calculate interpolation factor
@@ -84,7 +82,7 @@ for (let i = 0; i < numDisks; i++) {
 }
 
 camera.position.x = 4;
-camera.position.y = 8;  
+camera.position.y = 8;
 camera.position.z = 12;
 
 //  OrbitControls
@@ -167,8 +165,7 @@ function moveDisk(fromTowerIndex, toTowerIndex) {
   }
 
   // Check if the move is valid
-  const fromDisk =
-    disks[fromTowerIndex][disks[fromTowerIndex].length - 1];
+  const fromDisk = disks[fromTowerIndex][disks[fromTowerIndex].length - 1];
   const toDisk = disks[toTowerIndex][disks[toTowerIndex].length - 1];
   if (
     toDisk &&
@@ -259,8 +256,8 @@ document.getElementById("startGame").addEventListener("click", () => {
   movesui.innerText = moves;
 
   // Limpiar los discos actuales del escenario
-  disks.forEach(tower => {
-    tower.forEach(disk => {
+  disks.forEach((tower) => {
+    tower.forEach((disk) => {
       scene.remove(disk);
     });
   });
@@ -269,7 +266,7 @@ document.getElementById("startGame").addEventListener("click", () => {
   disks[2] = [];
 
   // Restablecer los colores de las torres a su color original
-  towers.forEach(tower => {
+  towers.forEach((tower) => {
     tower.material.color.set(0x808080); // Color gris original
   });
 
@@ -287,8 +284,6 @@ document.getElementById("startGame").addEventListener("click", () => {
   }
 });
 
-
-
 function animate() {
   requestAnimationFrame(animate);
   controls.update();
@@ -296,3 +291,4 @@ function animate() {
   renderer.render(scene, camera);
 }
 animate();
+
