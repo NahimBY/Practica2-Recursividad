@@ -1,10 +1,4 @@
 (function () {
-  // Unlike TrackballControls, it maintains the "up" direction object.up (+Y by default).
-  //
-  //		Orbit - left mouse / touch: one-finger move
-  //		Zoom - middle mouse, or mousewheel / touch: two-finger spread or squish
-  //		Pan - right mouse, or left mouse + ctrl/meta/shiftKey, or arrow keys / touch: two-finger move
-
   var OrbitControls = function (object, domElement) {
     if (domElement === undefined)
       console.warn(
@@ -15,21 +9,15 @@
         'THREE.OrbitControls: "document" should not be used as the target "domElement". Please use "renderer.domElement" instead.',
       );
     this.object = object;
-    this.domElement = domElement; // Set to false to disable this control
+    this.domElement = domElement;
 
-    this.enabled = true; // "target" sets the location of focus, where the object orbits around
-
-    this.target = new THREE.Vector3(); // How far you can dolly in and out ( PerspectiveCamera only )
-
+    this.enabled = true;
+    this.target = new THREE.Vector3();
     this.minDistance = 0;
-    this.maxDistance = Infinity; // How far you can zoom in and out ( OrthographicCamera only )
-
+    this.maxDistance = Infinity;
     this.minZoom = 0;
-    this.maxZoom = Infinity; // How far you can orbit vertically, upper and lower limits.
-    // Range is 0 to Math.PI radians.
-
-    this.minPolarAngle = 0; // radians
-
+    this.maxZoom = Infinity;
+    this.minPolarAngle = 0;
     this.maxPolarAngle = Math.PI; // radians
     // How far you can orbit horizontally, upper and lower limits.
     // If set, the interval [ min, max ] must be a sub-interval of [ - 2 PI, 2 PI ], with ( max - min < 2 PI )

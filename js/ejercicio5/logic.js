@@ -1,7 +1,6 @@
 let moves = 0;
 let movesui = document.getElementById("movesui");
 
-// Setup
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x87ceeb);
 
@@ -15,7 +14,6 @@ const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.getElementById("gamebox").appendChild(renderer.domElement);
 
-// lighting
 const ambientLight = new THREE.AmbientLight(0x404040);
 scene.add(ambientLight);
 
@@ -23,7 +21,6 @@ const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
 directionalLight.position.set(5, 10, 7.5).normalize();
 scene.add(directionalLight);
 
-// Create the base for the towers
 const baseGeometry = new THREE.BoxGeometry(12, 1, 5);
 const baseMaterial = new THREE.MeshPhongMaterial({ color: 0x8b4513 });
 const base = new THREE.Mesh(baseGeometry, baseMaterial);
@@ -31,7 +28,6 @@ base.position.x = 5;
 base.position.y = -0.5;
 scene.add(base);
 
-//create a tower
 const towers = [];
 const towerHeight = 6;
 
@@ -44,14 +40,12 @@ function createTower(x) {
   towers.push(tower);
 }
 
-// Create three towers
-createTower(1); // Primera torre en x = 0 (antes era -4)
-createTower(5); // Segunda torre en x = 4 (antes era 0)
-createTower(9); // Tercera torre en x = 8 (antes era 4)
+createTower(1);
+createTower(5);
+createTower(9);
 
 const disks = [[], [], []];
 
-// Function to interpolate between two colors
 function interpolateColor(color1, color2, factor) {
   const result = color1.clone();
   result.lerp(color2, factor);
@@ -67,33 +61,27 @@ function createDisk(radius, height, x, y, towerIndex, color) {
   disks[towerIndex].push(disk);
 }
 
-// Base color and target color for the gradient
-const baseColor = new THREE.Color(0x1e90ff); // Blue
-const targetColor = new THREE.Color(0xffffff); // White
+const baseColor = new THREE.Color(0x1e90ff);
+const targetColor = new THREE.Color(0xffffff);
 
-// Number of disks
 let numDisks = 3;
 
-// Create disks with gradient colors
 for (let i = 0; i < numDisks; i++) {
-  const factor = i / (numDisks - 1); // Calculate interpolation factor
-  const color = interpolateColor(baseColor, targetColor, factor); // Interpolate color
-  createDisk(1.5 - 0.25 * i, 0.5, -4, 0.25 + 0.5 * i, 0, color); // Create disk with interpolated color
+  const factor = i / (numDisks - 1);
+  const color = interpolateColor(baseColor, targetColor, factor);
+  createDisk(1.5 - 0.25 * i, 0.5, -4, 0.25 + 0.5 * i, 0, color);
 }
 
 camera.position.x = 4;
 camera.position.y = 8;
 camera.position.z = 12;
 
-//  OrbitControls
 const controls = new THREE.OrbitControls(camera, renderer.domElement);
-controls.enableDamping = true; // Enable inertia (damping)
-controls.dampingFactor = 0.25; // Damping factor
+controls.enableDamping = true;
+controls.dampingFactor = 0.25;
 
-// Variables for handling tower selection and disk movement
 let selectedTowerIndex = null;
 
-// Raycaster for detecting clicks
 const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
 
@@ -127,44 +115,34 @@ function onTouchStart(event) {
 
 function handleTowerSelection(towerIndex) {
   if (selectedTowerIndex === null) {
-    // Select the tower
     selectedTowerIndex = towerIndex;
-    towers[towerIndex].material.color.set(0xffff00); // Highlight selected tower
+    towers[towerIndex].material.color.set(0xffff00);
   } else {
-    // Move disk from selected tower to the clicked tower
     moveDisk(selectedTowerIndex, towerIndex);
-    towers[selectedTowerIndex].material.color.set(0x808080); // Reset the previous tower's color
+    towers[selectedTowerIndex].material.color.set(0x808080);
     selectedTowerIndex = null;
   }
 
-  // bug fix (last tower before finish dosnt change to golden after the game finished)
   if (disks[2].length === numDisks) {
-    // Game finished, change colors to golden
-
-    // Change color of disks
     disks[2].forEach((disk) => {
-      disk.material.color.set(0xffd700); // Golden color
+      disk.material.color.set(0xffd700);
     });
 
-    // Change color of rods (towers)
     towers.forEach((tower) => {
-      tower.material.color.set(0xffd700); // Golden color
+      tower.material.color.set(0xffd700);
     });
 
-    // Change color of base
-    base.material.color.set(0xffd700); // Golden color
+    base.material.color.set(0xffd700);
 
     console.log("Game finished!");
-    // You can add further logic here for game completion actions
   }
 }
 
 function moveDisk(fromTowerIndex, toTowerIndex) {
   if (disks[fromTowerIndex].length === 0) {
-    return; // No disk to move
+    return;
   }
 
-  // Check if the move is valid
   const fromDisk = disks[fromTowerIndex][disks[fromTowerIndex].length - 1];
   const toDisk = disks[toTowerIndex][disks[toTowerIndex].length - 1];
   if (
@@ -172,33 +150,28 @@ function moveDisk(fromTowerIndex, toTowerIndex) {
     fromDisk.geometry.parameters.radiusTop >
       toDisk.geometry.parameters.radiusTop
   ) {
-    return; // Invalid move
+    return;
   }
 
-  // Remove the disk from the source tower
   disks[fromTowerIndex].pop();
   console.log(disks);
 
-  // Animate the disk movement
   const targetPosition = {
     x: towers[toTowerIndex].position.x,
     y: 0.25 + disks[toTowerIndex].length * 0.5,
     z: 0,
   };
 
-  // Move disk up
   const upPosition = { ...fromDisk.position, y: towerHeight + 1 };
 
   new TWEEN.Tween(fromDisk.position)
     .to(upPosition, 500)
     .easing(TWEEN.Easing.Quadratic.Out)
     .onComplete(() => {
-      // Move disk horizontally
       new TWEEN.Tween(fromDisk.position)
         .to({ x: targetPosition.x }, 1000)
         .easing(TWEEN.Easing.Quadratic.Out)
         .onComplete(() => {
-          // Move disk down
           new TWEEN.Tween(fromDisk.position)
             .to(targetPosition, 500)
             .easing(TWEEN.Easing.Quadratic.Out)
@@ -208,36 +181,25 @@ function moveDisk(fromTowerIndex, toTowerIndex) {
     })
     .start();
 
-  // Add the disk to the destination tower
   disks[toTowerIndex].push(fromDisk);
   console.log("disk added to the destination");
   console.log(disks);
 
-  // update moves and UI
   moves++;
   movesui.innerText = moves;
 
-  // todo
-  // check if the game is finished
-
   if (disks[2].length === numDisks) {
-    // Game finished, change colors to golden
-
-    // Change color of disks
     disks[2].forEach((disk) => {
-      disk.material.color.set(0xffd700); // Golden color
+      disk.material.color.set(0xffd700);
     });
 
-    // Change color of rods (towers)
     towers.forEach((tower) => {
-      tower.material.color.set(0xffd700); // Golden color
+      tower.material.color.set(0xffd700);
     });
 
-    // Change color of base
-    base.material.color.set(0xffd700); // Golden color
+    base.material.color.set(0xffd700);
 
     console.log("Game finished!");
-    // You can add further logic here for game completion actions
   }
 }
 
@@ -251,11 +213,9 @@ window.addEventListener("resize", () => {
 });
 
 document.getElementById("startGame").addEventListener("click", () => {
-  // Restablecer movimientos
   moves = 0;
   movesui.innerText = moves;
 
-  // Limpiar los discos actuales del escenario
   disks.forEach((tower) => {
     tower.forEach((disk) => {
       scene.remove(disk);
@@ -265,22 +225,18 @@ document.getElementById("startGame").addEventListener("click", () => {
   disks[1] = [];
   disks[2] = [];
 
-  // Restablecer los colores de las torres a su color original
   towers.forEach((tower) => {
-    tower.material.color.set(0x808080); // Color gris original
+    tower.material.color.set(0x808080);
   });
 
-  // Restablecer el color de la base a su color original
-  base.material.color.set(0x8b4513); // Color marrón original
+  base.material.color.set(0x8b4513);
 
-  // Actualizar la cantidad de discos seleccionada
   numDisks = parseInt(document.getElementById("numDisksInput").value);
 
-  // Crear nuevos discos con la cantidad seleccionada y restablecer sus colores
   for (let i = 0; i < numDisks; i++) {
-    const factor = i / (numDisks - 1); // Calcular factor de interpolación
-    const color = interpolateColor(baseColor, targetColor, factor); // Color interpolado
-    createDisk(1.5 - 0.25 * i, 0.5, -4, 0.25 + 0.5 * i, 0, color); // Crear disco
+    const factor = i / (numDisks - 1);
+    const color = interpolateColor(baseColor, targetColor, factor);
+    createDisk(1.5 - 0.25 * i, 0.5, -4, 0.25 + 0.5 * i, 0, color);
   }
 });
 
@@ -291,4 +247,3 @@ function animate() {
   renderer.render(scene, camera);
 }
 animate();
-
